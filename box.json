@@ -1,0 +1,22 @@
+{
+    "directories": ["vendor","Temp"],
+    "main": "update-checker",
+    "output": "update-checker.phar",
+    "files": [
+        "LICENSE",
+        "README.md"
+    ],
+    "finder": [
+        {
+            "name": "*.*",
+            "exclude": ["Tests"],
+            "in": "vendor"
+        },
+        {
+            "name": "*.*",
+            "exclude": ["Tests"],
+            "in": "Temp"
+        }
+    ],
+    "stub": true
+}

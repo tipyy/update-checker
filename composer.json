@@ -1,0 +1,19 @@
+{
+    "name": "temp/update-checker",
+    "description": "An update checker for your composer.lock",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Stephan Wentz",
+            "email": "stephan@wentz.it"
+        }
+    ],
+    "require": {
+        "ext-curl": "*",
+        "symfony/console": "~2"
+    },
+    "bin": ["update-checker"],
+    "autoload": {
+        "psr-0": { "Temp\\Update": "" }
+    }
+}
