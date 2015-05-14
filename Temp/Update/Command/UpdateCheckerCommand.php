@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
+use Temp\Update\Formatters\TextFormatter;
 
 class UpdateCheckerCommand extends Command
 {
@@ -64,28 +65,8 @@ EOF
             return 1;
         }
 
-        $table = $this->getHelperSet()->get('table');
-        /* @var $table TableHelper */
-
-        $table->setHeaders(array('Name', 'Locale', 'Remote'));
-        $table->setPadType(STR_PAD_LEFT);
-
-        $hasRows = false;
-        foreach ($data as $name => $status) {
-            if (empty($status['error'])) {
-                $hasRows = true;
-                $table->addRow($status);
-            } elseif ($output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {
-                $output->writeln('<error>' . $name . ' ' . $status['message'] . '</error>');
-            }
-        }
-
-        if (!$hasRows) {
-            $output->writeln('<info>No updated packages found.</info>');
-            return 0;
-        }
-
-        $table->render($output);
+        $formatter = new TextFormatter($this->getHelperSet()->get('table'));
+        $formatter->displayResults($output, $input->getArgument('lock'), $data);
 
         return 0;
     }
