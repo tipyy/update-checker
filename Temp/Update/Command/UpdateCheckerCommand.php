@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
+use Temp\Update\Formatters\JsonFormatter;
 use Temp\Update\Formatters\TextFormatter;
 
 class UpdateCheckerCommand extends Command
@@ -39,6 +40,7 @@ class UpdateCheckerCommand extends Command
         $this
             ->setName('check')
             ->setDefinition(array(
+                new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The output format', 'text'),
                 new InputArgument('lock', InputArgument::OPTIONAL, 'The path to the composer.lock file', 'composer.lock')
             ))
             ->setDescription('Show updates in your project dependencies')
@@ -65,8 +67,16 @@ EOF
             return 1;
         }
 
-        $formatter = new TextFormatter($this->getHelperSet()->get('table'));
+        switch ($input->getOption('format')) {
+            case 'json':
+                $formatter = new JsonFormatter();
+                break;
+            case 'text':
+            default:
+                $formatter = new TextFormatter($this->getHelperSet()->get('table'));
+        }
         $formatter->displayResults($output, $input->getArgument('lock'), $data);
+
 
         return 0;
     }
